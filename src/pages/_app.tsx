@@ -9,6 +9,7 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import LinkList from "../components/LinkList";
+import CreateLink from "../components/CreateLink";
 
 // 2
 const httpLink = createHttpLink({
@@ -33,6 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
       <div>
+        <CreateLink/>
         <LinkList />
         <Component {...pageProps} />
       </div>

@@ -39,7 +39,6 @@ type data = {
 
 const LinkList = () => {
   const { data } : QueryResult<data> = useQuery(FEED_QUERY);
-  console.log("data:", data);
 
 //   const linksToRender: LinksToRender = [
 //     {
