@@ -10,6 +10,8 @@ import {
 } from "@apollo/client";
 import LinkList from "../components/LinkList";
 import CreateLink from "../components/CreateLink";
+import Nav from "../components/Nav";
+import { BrowserRouter } from "react-router-dom";
 
 // 2
 const httpLink = createHttpLink({
@@ -32,13 +34,18 @@ const client = new ApolloClient({
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ApolloProvider client={client}>
-      <div>
-        <CreateLink/>
-        <LinkList />
-        <Component {...pageProps} />
-      </div>
-    </ApolloProvider>
+    <BrowserRouter>
+      <ApolloProvider client={client}>
+        <div className="center w85">
+          <Nav />
+          <div className="ph3 pv1 background-gray">
+            {/* <CreateLink /> */}
+            <LinkList />
+            <Component {...pageProps} />
+          </div>
+        </div>
+      </ApolloProvider>
+    </BrowserRouter>
   );
 }
 
