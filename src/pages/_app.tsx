@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
+import { setContext } from '@apollo/client/link/context';
 
 // 1
 import {
@@ -8,10 +9,17 @@ import {
   createHttpLink,
   InMemoryCache,
 } from "@apollo/client";
-import LinkList from "../components/LinkList";
-import CreateLink from "../components/CreateLink";
-import Nav from "../components/Nav";
-import { BrowserRouter } from "react-router-dom";
+import { AUTH_TOKEN } from "../constants";
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem(AUTH_TOKEN);
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : ''
+    }
+  };
+});
 
 // 2
 const httpLink = createHttpLink({
@@ -20,32 +28,25 @@ const httpLink = createHttpLink({
 
 // 3
 const client = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache(),
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache()
 });
 
-// 4
-// ReactDOM.render(
-//   <ApolloProvider client={client}>
-//     <App />
-//   </ApolloProvider>,
-//   document.getElementById('root')
-// );
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <BrowserRouter>
       <ApolloProvider client={client}>
+         <link
+          rel="stylesheet"
+          href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"
+        />
         <div className="center w85">
-          <Nav />
           <div className="ph3 pv1 background-gray">
-            {/* <CreateLink /> */}
-            <LinkList />
             <Component {...pageProps} />
           </div>
         </div>
       </ApolloProvider>
-    </BrowserRouter>
   );
 }
 
